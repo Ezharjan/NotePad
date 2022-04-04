@@ -1,0 +1,217 @@
+<html lang="en">
+
+<head>
+    <title>UNotepad</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#795548" />
+    <meta name="description"
+        content="An offline capable notepad powered by ServiceWorker. It's quick, distraction-free, dark mode enabled, mobile compatible(Android, iOS) and minimalist in nature." />
+    <meta name="keywords" content="note,offline,mobile,web,notepad,android,ios,desktop" />
+    <meta name="author" content="Alexander Ezharjan" />
+    <meta name="application-name" content="Notepad" />
+    <meta name="google-site-verification" content="ulSTJh7j6NN54_KiZAJePCb_lYYbyvN28efzvScizHw" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="img/notepad-apple-icon.png" />
+    <link rel="mask-icon" href="img/icon-mask.svg" color="black" />
+    <!-- for Facebook
+        <meta property="og:title" content="Notepad - Offline capable" />
+        <meta property="og:type" content="appliction" />
+        <meta property="og:image" content="https://notepad.js.org/img/thumbnail.png" />
+        <meta property="og:url" content="https://www.github.com/Ezharjan" />
+        <meta property="og:description"
+        content="An offline capable notepad powered by ServiceWorker. It's quick, distraction-free, dark mode enabled, mobile compatible(Android, iOS) and minimalist in nature." />
+    -->
+    <!-- for Twitter
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content="Notepad - Offline capable" />
+        <meta property="twitter:image" content="https://notepad.js.org/img/thumbnail.png" />
+        <meta property="twitter:description"
+        content="An offline capable notepad powered by ServiceWorker. It's quick, distraction-free, dark mode enabled, mobile compatible(Android, iOS) and minimalist in nature." />
+    -->
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </span>
+                <span><a class="navbar-brand app-heading" href="#">Notepad</a></span>
+                <span>
+                    <a id="clearNotes" class="navbar-brand trash-icon" title="Delete Notes">
+                        <img src="img/navbar/delete.svg" alt="Delete Icon" />
+                    </a>
+                </span>
+                <span>
+                    <a id="downloadNotes" class="navbar-brand download-icon" title="Download Notes [Ctrl/Cmd + S]">
+                        <img src="img/navbar/download.svg" alt="Download Icon" />
+                    </a>
+                </span>
+                <span>
+                    <a href="javascript:void(0);" id="copyToClipboard" class="navbar-brand"
+                        title="Copy notes to clipboard">
+                        <img src="img/navbar/copy.svg" alt="Copy Icon" />
+                    </a>
+                </span>
+                <span title="Enable dark mode">
+                    <a id="mode" class="navbar-brand">
+                        <img src="img/navbar/light-theme.svg" alt="Light theme Icon" id="light" />
+                        <img src="img/navbar/dark-theme.svg" alt="Dark theme Icon" id="dark" />
+                    </a>
+                </span>
+                <!-- <div class="dropdown">
+                    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">主题
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#">Uyghur</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#">English</a>
+                        </li>
+                    </ul>
+                </div> -->
+                <span title="Change language">
+                    <a id="lang" class="navbar-brand">
+                        <img src="img/navbar/uy-lang.svg" alt="Uyghurche Icon" id="uygch" />
+                        <img src="img/navbar/en-lang.svg" alt="English Icon" id="eng" />
+                    </a>
+                </span>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#about" data-toggle="modal" data-target="#aboutModal">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="starter-template">
+            <textarea id="note" class="ug"
+                placeholder="Type your notes here and when you come back all your notes will be right here..."
+                autofocus></textarea>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title custom-modal-title">
+                        Notepad - Offline capable
+                    </h4>
+                    <span class="install-app-btn-container">
+                        <a id="installApp" class="install-app-btn" href="javascript:void(0);">Install</a>
+                    </span>
+                </div>
+                <div class="modal-body modal-container">
+                    <p>
+                        Notepad is an offline-capable
+                        <a href="https://www.github.com/Ezharjan" target="_blank">Progressive Web App</a>.
+                    </p>
+
+                    <p>The app serves the following features:</p>
+
+                    <ul>
+                        <li>
+                            Write notes which are then saved to the
+                            browser's
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+                                target="_blank">localStorage</a>.
+                        </li>
+                        <li>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Developer_guide/Installing"
+                                target="_blank">Installable</a>
+                            on supported browsers for offline usage.
+                        </li>
+                        <li>
+                            "Add To Home Screen" feature on
+                            Android-supported devices to launch the app from
+                            the home screen.
+                        </li>
+                        <li>Dark mode.</li>
+                        <li>
+                            Privacy-focused - We'll never collect your
+                            precious data.
+                        </li>
+                        <li>Light-weight - Loads almost instantly.</li>
+                        <li>
+                            It's
+                            <a href="https://github.com/Ezharjan" target="_blank">open-source</a>!
+                        </li>
+                    </ul>
+                    <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" />
+                    <p>
+                        If you liked using this app, consider a small
+                        <a href="https://www.paypal.com/paypalme/AmitMerchant" target="_blank">donation</a>
+                        so that I keep working on improving it further.
+                        Icons from
+                        <a href="https://www.flaticon.com/" target="_blank">Flaticon</a>.
+                    </p>
+                    <p style="text-align: center; margin-top: 10px">
+                        <b>Made with ❤️ by
+                            <a href="https://www.github.com/Ezharjan" target="_blank">Alexander Ezharjan</a></b>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast"></div>
+
+    <script src="./js/uygch.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i["GoogleAnalyticsObject"] = r;
+            (i[r] =
+                i[r] ||
+                function () {
+                    (i[r].q = i[r].q || []).push(arguments);
+                }),
+                (i[r].l = 1 * new Date());
+            (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m);
+        })(
+            window,
+            document,
+            "script",
+            "https://www.google-analytics.com/analytics.js",
+            "ga"
+        );
+
+        ga("create", "UA-43339302-6", "auto");
+        ga("send", "pageview");
+    </script>
+</body>
+
+</html>
