@@ -2,4 +2,4 @@
 
 #### 介绍
 This is a note pad web application for multiple utilization. Developed by Alexander Ezharjan.
-Among this repositry, there is some tools for reference.
+Among these codes, there are some tools for reference.
